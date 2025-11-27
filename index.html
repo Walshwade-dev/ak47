@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ACE–KING–4–7</title>
+</head>
+
+<body id="app" class="min-h-screen bg-[url('/assets/pokergreen.jpg')] bg-cover bg-center">
+    <div class="max-w-6xl mx-auto md:p-4 h-full">
+        <header class="relative mb-4 py-5 h-[20vh]">
+            <div class="flex items-center justify-between px-4">
+                <h1 class="text-white text-2xl font-bold">AK47 CARDS</h1>
+
+                <div class="select-option-container flex gap-2 items-center justify-center">
+                    <div class="flex gap-2 bg-[#daf1de] text-[#163832] rounded-lg font-semibold ">
+                        <select id="winRule" class="rounded px-2 py-1 bg-inherit">
+                            <option value="ak47">AK47</option>
+                            <option value="pairs">Two Pairs</option>
+                            <option value="sequence">Sequence</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2 bg-[#daf1de] text-[#163832] rounded-lg font-semibold ">
+                        <select id="bgSelector" class="rounded px-2 py-1 bg-inherit">
+                            <option value="/assets/pokergreen.jpg">Green</option>
+                            <option value="/assets/pokerred.jpg">Red</option>
+                            <option value="/assets/pokerdark.jpg">Dark</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Status area -->
+            <div id="status" class="col-span-12 py-4 flex mt-4 text-white">
+                <div class="align-middle items-center justify-center text-center flex  col-span-6 flex-1">Deck ID:
+                    <span id="deckId" class="font-semibold text-yellow-300/90">abcd1234</span>
+                </div>
+                <div class="col-span-6 flex-1">Remaining:
+                    <span id="remaining" class="font-semibold text-yellow-300/90">0</span>
+                </div>
+            </div>
+
+            <button id="startBtn"
+                class="absolute left-0  font-semibold bg-yellow-300 text-[#051f20] rounded-tr-2xl rounded-br-2xl px-3 py-1">
+                Start Game
+            </button>
+
+            <button id="declareBtn"
+                class="absolute left-0 top-[90%] rounded-br-2xl rounded-tr-2xl  bg-yellow-300 text-[#163832] px-3 py-1 font-semibold ">
+                DECLARE
+            </button>
+
+            <button id="restartBtn" class="hidden font-semibold bg-red-400 text-white px-3 py-1 rounded-lg shadow">
+                Restart
+            </button>
+
+
+        </header>
+
+        <!-- Main grid: 12 columns -->
+        <main class="grid grid-cols-12 gap-4 h-[80vh] pt-4">
+            <!-- Opponent hand (top) spans full width -->
+            <section id="opponentHand" class="col-span-12 flex justify-center gap-2 ">Opponent</section>
+
+            <!-- Center area: draw pile and discard -->
+            <section class="col-span-12 md:col-span-4 md:col-start-5 flex justify-center items-start gap-6">
+                <div id="drawPile"
+                    class="w-28 h-40 lg:w-32 lg:h-48 border-2 border-[#0b2b26] object-contain rounded-lg shadow-lg overflow-hidden">
+                </div>
+                <div id="discardPile"
+                    class="w-28 h-40 lg:w-32 lg:h-48 border-2 border-[#0b2b26] object-contain rounded-lg shadow-lg overflow-hidden">
+                </div>
+            </section>
+
+            <!-- Player hand (bottom) spans full width -->
+            <section id="playerHand" class="col-span-12 flex justify-center gap-2 lg:gap-4">Player 1</section>
+
+        </main>
+
+        <div
+            class=" absolute top-[50%] -right-14 transform rotate-90 orginal-top-right flex gap-4 px-2 py-1 tracking-wider">
+            <span class="text-yellow-300 font-semibold">Player:</span>
+            <span id="currentPlayer" class="text-[#daf1de] font-semibold">Player 1
+            </span>
+        </div>
+
+        <div id="statusMessage" class="hidden fixed top-[50%] left-0 right-0 -translate-y-1/2 
+           bg-[#daf1deb7] text-[#163832] 
+           px-4 py-2 shadow-lg 
+           font-semibold text-lg 
+           opacity-0 transition-all duration-300 
+           z-50 text-center justify-center items-center">
+        </div>
+
+    </div>
+
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
