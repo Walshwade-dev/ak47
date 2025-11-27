@@ -182,10 +182,20 @@ export function updatePenaltyStatus(playerId) {
 // -------------------------------------------------------------
 export function completeTurnAfterReplacement() {
     const pid = gameState.currentPlayerIndex;
+    const player = gameState.players[pid];
 
-    const result = evaluateDeclarationAfterDraw(pid);
+    if(hasWinningHand(player.hand)) {
+        return "win-now";
+    }
 
-    return result; // caller handles win/declare UI
+    if(hasPotentialWinningHand(player.hand)) {
+        player.mustDeclare = true;
+        return "must-declare";
+    }
+
+    // No potential — clear mustDeclare
+    player.mustDeclare = false;
+    return "normal";
 }
 
 // -------------------------------------------------------------

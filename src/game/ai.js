@@ -10,7 +10,10 @@ import {
     endTurn
 } from './turn.js';
 import { renderAll } from '../ui/render.js';
-import { hasWinningHand, hasPotentialWinningHand } from './win.js';
+import { hasWinningHand, hasPotentialWinningHand, valueOrder } from './win.js';
+import { showToast } from '../ui/toast.js';
+import { lockBoard, unlockBoard } from "../ui/lock.js";
+
 
 /** small sleep helper */
 function sleep(ms = 600) {
@@ -19,22 +22,80 @@ function sleep(ms = 600) {
 
 /** Score a hand for AI heuristics (higher is better) */
 function scoreHand(hand) {
-    // give priority to immediate win
-    if (hasWinningHand(hand)) return 1000;
-    // potential: count how many of AK47 matched
-    const needed = ["ACE", "KING", "4", "7"];
-    let match = 0;
-    for (const v of needed) if (hand.some(c => c.value === v)) match++;
-    // pairs add weight
-    const counts = {};
-    let bestPair = 0;
-    for (const c of hand) {
-        counts[c.value] = (counts[c.value] || 0) + 1;
-        bestPair = Math.max(bestPair, counts[c.value]);
+
+    const mode = gameState.rules.winMode;
+
+    if (hasWinningHand(hand)) return 9999;
+
+    switch (mode) {
+        case "ak47":
+            return scoreAK47(hand);
+
+        case "pairs":
+            return scorePairs(hand);
+
+        case "sequence":
+            return scoreSequence(hand);
+
+        default:
+            return 0;
     }
-    // score = base from matches + pair bonus
-    return match * 30 + bestPair * 50;
 }
+
+function scoreAK47(hand) {
+    const needed = ["ACE", "KING", "4", "7"];
+    let score = 0;
+    const values = hand.map(c => c.value);
+    needed.forEach(v => {
+        if (values.includes(v)) score += 25;
+    });
+
+    hand.forEach(c => score += valueOrder[c.value] / 10); // small bonus for high cards
+    return score;
+}
+
+
+function scorePairs(hand) {
+    const counts = {};
+    hand.forEach(c => counts[c.value] = (counts[c.value] || 0) + 1);
+
+    let score = 0;
+
+    for (const value in counts) {
+        if (counts[value] === 2) score += 40;
+    }
+
+    hand.forEach(c => {
+        if (counts[c.value] === 1) {
+            score += valueOrder[c.value] / 10; // small bonus for high unpaired cards
+        }
+    });
+    return score;
+}
+
+function scoreSequence(hand) {
+    const nums = hand.map(c => valueOrder[c.value]).sort((a, b) => a - b);
+    let score = 0;
+
+    // reward small straights (3-in-a-row)
+    for (let i = 0; i < nums.length - 2; i++) {
+        if (nums[i + 1] === nums[i] + 1 && nums[i + 2] === nums[i] + 1) {
+            score += 60;
+        }
+    }
+
+    //reward adjacent cards (2-in-a row)
+    for (let i = 0; i < nums.length - 1; i++) {
+        if (nums[i + 1] === nums[i] + 1) score += 20;
+    }
+
+    //reward general card quality
+    nums.forEach(n => score += n / 10);
+
+    return score;
+}
+
+
 
 /**
  * Find index of a card in hand that is least useful (lowest resulting score if kept)
@@ -42,26 +103,28 @@ function scoreHand(hand) {
  */
 function chooseDiscardIndex(hand, newCard = null) {
     let bestScore = -Infinity;
-    let bestReplaceIndex = 0;
+    let bestIndex = 0;
 
     // If newCard == null, we evaluate which card to discard without replacement (used rarely)
     for (let i = 0; i < hand.length; i++) {
         const simulated = hand.slice();
+
         if (newCard) {
-            // simulate replacing card i with newCard
-            simulated.splice(i, 1, newCard);
+            simulated[i] = newCard; // simulate replacement
         } else {
-            // simulate removing card i (not replacing) -> we will evaluate with a placeholder low score
-            simulated.splice(i, 1);
+            simulated.splice(i, 1); // simulate discard without replacement
         }
-        const sc = scoreHand(simulated);
-        if (sc > bestScore) {
-            bestScore = sc;
-            bestReplaceIndex = i;
+
+        const score = scoreHand(simulated);
+        if (score > bestScore) {
+            bestScore = score;
+            bestIndex = i;
         }
     }
-    return bestReplaceIndex;
+    return bestIndex;
 }
+
+
 
 /**
  * AI main routine: plays one full turn for player with id = aiId (default 1)
@@ -190,9 +253,7 @@ export async function aiTakeTurn(aiId = 1) {
             showToast("Computer Wins!", 1500, true);
             lockBoard();
             document.getElementById('restartBtn').classList.remove('hidden');
-
-            renderAll();
-            return;
+            return 'win-now';
         }
     }
 
