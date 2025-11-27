@@ -10,7 +10,7 @@ function createCardImgFront(card) {
     img.src = card.image;
     img.alt = `${card.value} of ${card.suit}`;
     img.loading = 'lazy';
-    img.className = 'w-20 h-28 lg:w-32 lg:h-48 object-cover rounded-lg shadow-md pointer-events-none';
+    img.className = 'w-20 h-28 lg:w-32 lg:h-48 object-contain md:object-cover rounded-lg shadow-md pointer-events-none';
     img.style.willChange = 'transform, opacity';
     img.style.backfaceVisibility = 'hidden';
     img.style.transform = 'translateZ(0)';
@@ -22,7 +22,7 @@ function createCardImgBack() {
     img.src = getRandomCardBack(gameState.ui.cardBacks);
     img.alt = 'card back';
     img.loading = 'lazy';
-    img.className = 'w-20 h-28 lg:w-32 lg:h-48 object-cover rounded-lg shadow-md pointer-events-none';
+    img.className = 'w-20 h-28 lg:w-32 lg:h-48 object-contain md:object-cover rounded-lg shadow-md pointer-events-none';
     img.style.willChange = 'transform, opacity';
     img.style.backfaceVisibility = 'hidden';
     img.style.transform = 'translateZ(0)';
@@ -44,7 +44,7 @@ export function renderHands() {
     /* ---- PLAYER HAND ---- */
     gameState.players[0].hand.forEach((card, idx) => {
         const wrapper = document.createElement('div');
-        wrapper.className = 'w-20 h-28 lg:w-32 lg:h-48  relative cursor-pointer inline-flex items-center justify-center';
+        wrapper.className = 'w-20 h-28 lg:w-32 lg:h-48 object-contain relative cursor-pointer inline-flex items-center justify-center';
         wrapper.dataset.playerId = 0;
         wrapper.dataset.cardIndex = idx;
 
@@ -70,7 +70,7 @@ export function renderHands() {
     /* ---- OPPONENT HAND ---- */
     gameState.players[1].hand.forEach(() => {
         const wrapper = document.createElement('div');
-        wrapper.className = 'w-20 h-28 lg:w-32 lg:h-48 relative inline-flex items-center justify-center';
+        wrapper.className = 'w-20 h-28 lg:w-32 lg:h-48 object-contain relative inline-flex items-center justify-center';
 
         wrapper.appendChild(createCardImgBack());
         opponentHandEl.appendChild(wrapper);
