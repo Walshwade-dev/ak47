@@ -6,6 +6,10 @@
     --vh: 1vh;
 }
 
+body {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
 .selection-overlay {
     box-shadow: 0 0 10px 2px rgba(253, 224, 71, 0.8);
 }
