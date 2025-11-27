@@ -9,12 +9,12 @@
 
 <body id="app" class="min-h-screen bg-[url('/assets/pokergreen.jpg')] bg-cover bg-center">
     <div class="max-w-6xl mx-auto md:p-4 h-full">
-        <header class="relative mb-4 py-5 h-[20vh]">
-            <div class="flex items-center justify-between px-4">
-                <h1 class="text-white text-2xl font-bold">AK47 CARDS</h1>
+        <header class="relative py-2 md:mb-4 md:py-5 h-[20vh]">
+            <div class="flex flex-col md:flex-row items-center justify-items-start px-4">
+                <h1 class="text-white  text-3xl font-bold sm:mb-4">AK47 CARDS</h1>
 
-                <div class="select-option-container flex gap-2 items-center justify-center">
-                    <div class="flex gap-2 bg-[#daf1de] text-[#163832] rounded-lg font-semibold ">
+                <div class="select-option-container flex  md:gap-2 md:items-center md:justify-center">
+                    <div class="flex mr-16 bg-[#daf1de] text-[#163832] rounded-lg font-semibold min-w-10">
                         <select id="winRule" class="rounded px-2 py-1 bg-inherit">
                             <option value="ak47">AK47</option>
                             <option value="pairs">Two Pairs</option>
@@ -22,7 +22,7 @@
                         </select>
                     </div>
 
-                    <div class="flex gap-2 bg-[#daf1de] text-[#163832] rounded-lg font-semibold ">
+                    <div class="flex  gap-2 bg-[#daf1de] text-[#163832] rounded-lg font-semibold">
                         <select id="bgSelector" class="rounded px-2 py-1 bg-inherit">
                             <option value="/assets/pokergreen.jpg">Green</option>
                             <option value="/assets/pokerred.jpg">Red</option>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <!-- Status area -->
-            <div id="status" class="col-span-12 py-4 flex mt-4 text-white">
+            <div id="status" class="col-span-12 py-2 md:py-4 flex mt-4 text-white">
                 <div class="align-middle items-center justify-center text-center flex  col-span-6 flex-1">Deck ID:
                     <span id="deckId" class="font-semibold text-yellow-300/90">abcd1234</span>
                 </div>
@@ -59,9 +59,9 @@
         </header>
 
         <!-- Main grid: 12 columns -->
-        <main class="grid grid-cols-12 gap-4 h-[80vh] pt-4">
+        <main class="grid grid-cols-12  gap-4 h-[80vh] pt-16 px-2 md:pt-4">
             <!-- Opponent hand (top) spans full width -->
-            <section id="opponentHand" class="col-span-12 flex justify-center gap-2 ">Opponent</section>
+            <section id="opponentHand" class="col-span-12 flex justify-center gap-2  sm:mt-8">Opponent</section>
 
             <!-- Center area: draw pile and discard -->
             <section class="col-span-12 md:col-span-4 md:col-start-5 flex justify-center items-start gap-6">
@@ -79,7 +79,7 @@
         </main>
 
         <div
-            class=" absolute top-[50%] -right-14 transform rotate-90 orginal-top-right flex gap-4 px-2 py-1 tracking-wider">
+            class=" absolute top-[50%] sm:top-[90%] -right-14 transform rotate-90 orginal-top-right flex gap-4 px-2 py-1 tracking-wider">
             <span class="text-yellow-300 font-semibold">Player:</span>
             <span id="currentPlayer" class="text-[#daf1de] font-semibold">Player 1
             </span>
